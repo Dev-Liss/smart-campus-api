@@ -77,6 +77,7 @@ public class SensorResource {
 
     @DELETE
     @Path("/{sensorId}")
+    @Produces(MediaType.APPLICATION_JSON)
     public Response deleteSensor(@PathParam("sensorId") String sensorId) {
         Sensor sensor = dataStore.getSensors().get(sensorId);
         if (sensor == null) {

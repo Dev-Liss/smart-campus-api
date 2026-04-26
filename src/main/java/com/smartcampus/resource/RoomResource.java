@@ -13,7 +13,6 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
-import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.UUID;
@@ -21,11 +20,7 @@ import java.util.UUID;
 @Path("/rooms")
 public class RoomResource {
 
-    private final DataStore dataStore;
-
-    public RoomResource(@Context DataStore dataStore) {
-        this.dataStore = dataStore;
-    }
+    private final DataStore dataStore = DataStore.getInstance();
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
@@ -100,6 +95,7 @@ public class RoomResource {
 
     @DELETE
     @Path("/{roomId}")
+    @Produces(MediaType.APPLICATION_JSON)
     public Response deleteRoom(@PathParam("roomId") String roomId) {
         Room room = dataStore.getRooms().get(roomId);
         if (room == null) {
