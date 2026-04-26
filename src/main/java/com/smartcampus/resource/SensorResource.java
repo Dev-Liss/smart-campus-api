@@ -14,10 +14,13 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.net.URI;
+import java.util.Collection;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Path("/sensors")
 public class SensorResource {
@@ -26,8 +29,14 @@ public class SensorResource {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getAllSensors() {
-        return Response.ok(dataStore.getSensors().values()).build();
+    public Response getAllSensors(@QueryParam("type") String type) {
+        Collection<Sensor> sensors = dataStore.getSensors().values();
+        if (type != null && !type.isBlank()) {
+            sensors = sensors.stream()
+                    .filter(s -> s.getType().equalsIgnoreCase(type))
+                    .collect(Collectors.toList());
+        }
+        return Response.ok(sensors).build();
     }
 
     @GET
