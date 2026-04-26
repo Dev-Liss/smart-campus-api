@@ -61,7 +61,9 @@ public class RoomResource {
                     .build();
         }
 
-        room.setId(UUID.randomUUID().toString());
+        if (room.getId() == null || room.getId().trim().isEmpty()) {
+            room.setId(UUID.randomUUID().toString());
+        }
         dataStore.getRooms().put(room.getId(), room);
         return Response.status(Response.Status.CREATED).entity(room).build();
     }
